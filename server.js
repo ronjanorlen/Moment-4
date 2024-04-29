@@ -1,14 +1,16 @@
 /* Applikation för registrering och inloggning */
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const authRoutes = require("./routes/authRoutes");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const express = require("express"); // Inkludera express
+const authRoutes = require("./routes/authRoutes"); // Routes
+const jwt = require("jsonwebtoken"); // Inkludera jsonwebtoken
+const cors = require("cors"); // Inkludera cors
+require("dotenv").config(); // Inkludera dotenv
 
-const app = express();
-const port = process.env.PORT || 3000;
-app.use(bodyParser.json());
+const app = express(); // Använd express
+app.use(express.json()); // Middleware för konvertering till json
+const port = process.env.PORT || 3000; // Kör angiven port från env-fil eller port 3000
+
+app.use(cors()); // Använd cors för att tillåta alla domäner
 
 /* Routes */
 app.use("/api", authRoutes);
@@ -33,6 +35,6 @@ function authenticateToken(req, res, next) {
     });
 }
 /* Starta applikationen */
-app.listen(port, () => {
+app.listen(port, () => { 
     console.log("Server running at port: " + port);
 })

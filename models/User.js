@@ -1,21 +1,21 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const mongoose = require("mongoose"); // Inkludera mongoose
+const bcrypt = require("bcrypt"); // Inkludera bcrypt för hashat lösenord
 
 /* User schema */
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true,
-        trim: true
+        required: true, // Obligatoriskt
+        unique: true, // Måste vara unikt
+        trim: true // Ta bort ev mellanslag
     },
     password: {
         type: String,
-        required: true,
+        required: true, // Obligatoriskt
     },
     created: {
         type: Date,
-        default: Date.now
+        default: Date.now // Aktuellt datum som default
     }
 });
 
@@ -23,11 +23,11 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function(next) {
     try {
         if(this.isNew || this.isModified("password")) {
-            const hashedPassword = await bcrypt.hash(this.password, 10);
-            this.password = hashedPassword;
+            const hashedPassword = await bcrypt.hash(this.password, 10); // Skapa hashat lösenord
+            this.password = hashedPassword; // Ersätt lösenord med hashat lösen
         }
 
-        next();
+        next(); // Registrera användaren
     } catch(error) {
         next(error);
     }
@@ -57,19 +57,20 @@ userSchema.methods.comparePassword = async function(password) {
 /* Logga in användare */
 userSchema.statics.login = async function (username, password) {
     try {
-        const user = await this.findOne({ username });
+        const user = await this.findOne({ username }); // Kolla om användare finns
+        // Om användare inte finns
         if(!user) {
-            throw new Error("Felaktigt användarnamn eller lösenord");
+            throw new Error("Felaktigt användarnamn eller lösenord"); 
         }
 
-        const isPasswordMatch = await user.comparePassword(password);
+        const isPasswordMatch = await user.comparePassword(password); // Kolla om lösenordet stämmer
 
-        // Om fel
+        // Om fel lösenord
         if(!isPasswordMatch) {
             throw new Error("Felaktigt användarnamn eller lösenord");
         }
 
-        // Om rätt
+        // Om rätt, returnera användare
         return user;
 
     } catch(error) {
@@ -77,5 +78,5 @@ userSchema.statics.login = async function (username, password) {
     }
 }
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+const User = mongoose.model("User", userSchema); // Skapa mongoose-model av schemat
+module.exports = User; // Exportera User

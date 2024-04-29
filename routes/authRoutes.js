@@ -1,10 +1,10 @@
 /* Routes för registrering och inloggning */
 
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const express = require("express"); // Inkludera express
+const router = express.Router(); // Router-objekt
+const mongoose = require("mongoose"); // Inkludera mongoose
+const jwt = require("jsonwebtoken"); // Inkludera jsonwebtoken
+require("dotenv").config(); // Inkluder dotenv
 
 /* Anslut till mongoDB */
 mongoose.set("strictQuery", false);
@@ -20,20 +20,21 @@ const User = require("../models/User");
 /* Lägg till ny användare */ 
 router.post("/register", async(req, res) => {
     try {
-        
+        // Hämta användarnamn och lösen från body
         const { username, password } = req.body;
-
         // Validera input
         if(!username || !password) {
+            // Om fel
             return res.status(400).json({ error: "Invalid input, send username and password" });
         }
 
         // Om korrekt - spara användare
         const user = new User({ username, password });
+        // Spara användaren i databasen
         await user.save();
-
+        // Meddelande om lyckat sparande
         res.status(201).json({ message: "Användare skapad "});
-
+        // Om eventuella fel
     } catch (error) {
         res.status(500).json({error: "Server error" });
     }
