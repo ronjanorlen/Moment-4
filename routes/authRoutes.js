@@ -6,7 +6,7 @@ const router = express.Router();
 /* Lägg till ny användare */ 
 router.post("/register", async(req, res) => {
     try {
-        // LÄGG IN DATUM
+        // LÄGG IN DATUM ????
         const { username, password } = req.body;
 
         // Validera input
