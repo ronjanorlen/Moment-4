@@ -24,7 +24,7 @@ app.get("/api/workexperiences", authenticateToken, async (req, res) => {
         // Kontroll om det finns data i databaser
         if (job.length === 0) {
             // Meddelande om inget data finns i databasen
-            return res.status(404).json({ message: "Inga jobberfarenheter funna" });
+            return res.status(404).json({ message: "Hittade inga arbetserfarenheter" });
         } else {
             // Returnerar erfarenheter
             return res.json(job);
@@ -42,10 +42,10 @@ function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Token
     // Om besökare inte har tillgång till sidan
-    if(token == null) res.status(401).json({ message: "Not authorized for this route - token missing" });
+    if(token == null) res.status(401).json({ message: "Ej berättigad åtkomst - token saknas" });
     
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
-        if(err) return res.status(403).json({ message: "Invalid JWT" });
+        if(err) return res.status(403).json({ message: "Ogiltig JWT" });
 
         req.username = username; 
         next();

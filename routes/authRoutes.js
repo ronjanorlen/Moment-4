@@ -25,7 +25,7 @@ router.post("/register", async(req, res) => {
         // Validera input
         if(!username || !password) {
             // Om fel
-            return res.status(400).json({ error: "Invalid input, send username and password" });
+            return res.status(400).json({ error: "Ogiltig input, vänligen ange användarnamn och lösenord" });
         }
         // Kontrollera om användare redan finns
         const userExist = await User.findOne({ username: username });
@@ -52,7 +52,7 @@ router.post("/login", async(req, res) => {
 
         // Validera input
         if(!username || !password) {
-            return res.status(400).json({ error: "Invalid input, send username and password "});
+            return res.status(400).json({ error: "Ogiltig input, vänligen ange användarnamn och lösenord" });
         }
         /* Kontrollera angivna uppgifter */
         // Finns användare redan?
