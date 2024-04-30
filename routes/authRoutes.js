@@ -4,7 +4,7 @@ const express = require("express"); // Inkludera express
 const router = express.Router(); // Router-objekt
 const mongoose = require("mongoose"); // Inkludera mongoose
 const jwt = require("jsonwebtoken"); // Inkludera jsonwebtoken
-require("dotenv").config(); // Inkluder dotenv
+require("dotenv").config(); // Inkludera dotenv
 
 /* Anslut till mongoDB */
 mongoose.set("strictQuery", false);
@@ -27,7 +27,12 @@ router.post("/register", async(req, res) => {
             // Om fel
             return res.status(400).json({ error: "Invalid input, send username and password" });
         }
-
+        // Kontrollera om användare redan finns
+        const userExist = await User.findOne({ username: username });
+        if (userExist) {
+            // Om användare redan finns
+            return res.status(409).json({ error: "Användarnamnet är upptaget "});
+        }
         // Om korrekt - spara användare
         const user = new User({ username, password });
         // Spara användaren i databasen
@@ -49,16 +54,13 @@ router.post("/login", async(req, res) => {
         if(!username || !password) {
             return res.status(400).json({ error: "Invalid input, send username and password "});
         }
-
-        // Kontrollera angivna uppgifter
-       
+        /* Kontrollera angivna uppgifter */
         // Finns användare redan?
         const user = await User.findOne({ username });
         if(!user) {
             return res.status(401).json({ error: "Felaktiga användaruppgifter "});
 
         }
-
         // Kontrollera lösenord 
         const isPasswordMatch = await user.comparePassword(password);
         if(!isPasswordMatch) {
@@ -79,4 +81,4 @@ router.post("/login", async(req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router; // Exporta router-objekt
