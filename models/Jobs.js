@@ -29,5 +29,5 @@ const workSchema = new mongoose.Schema({
     }
 });
 
-const Jobs = mongoose.model("Jobs", workSchema, "myjobs"); // Skapa mongoosemodel med schema workSchema, använd collection "myjobs"
+const Jobs = mongoose.model("Jobs", workSchema, "workexperiences"); // Skapa mongoosemodel med schema workSchema, använd collection "myjobs"
 module.exports = Jobs;  // Exportera Jobs
