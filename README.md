@@ -1,4 +1,4 @@
-# Moment 4 - Autentisering och säkerhet
+# Moment 4.1 - Autentisering och säkerhet
 
 Detta är en webbtjänst byggd med Node.js och Express och använder JWT-baserad autentisering
 för att hantera data. Besökare har möjlighet att skapa ett konto samt logga in.
